@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pasar Cerdas - Verifikasi OTP</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons (untuk ikon HP) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Kustomisasi Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'app-blue': '#0060AF', 
+                        'app-light': '#E5F3FF', 
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .full-viewport {
+            min-height: 100vh;
+        }
+        .btn-shadow {
+            box-shadow: 0 4px 15px rgba(0, 96, 175, 0.4);
+        }
+
+        /* Styling spesifik untuk input OTP */
+        .otp-input {
+            width: 40px; /* Lebar kecil untuk 1 digit */
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .otp-input:focus {
+            border-color: #0060AF;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 96, 175, 0.3);
+        }
+        /* Hanya tampilkan cursor di mobile, sembunyikan panah input number */
+        .otp-input::-webkit-outer-spin-button,
+        .otp-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="full-viewport flex items-center justify-center bg-app-light p-4">
+
+    <!-- Kontainer Utama (Card) -->
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 sm:p-10">
+        
+        <!-- Header Verifikasi -->
+        <div class="text-center mb-10">
+            <i class="ph-fill ph-device-mobile-camera text-6xl text-app-blue mx-auto mb-4"></i>
+            <h1 class="text-3xl font-extrabold text-gray-800">Verifikasi OTP</h1>
+            <p class="text-gray-500 mt-2">Masukkan 6 digit kode yang telah kami kirimkan ke nomor Anda.</p>
+        </div>
+
+        <!-- Formulir OTP -->
+        <form id="otpForm" class="space-y-6">
+            
+            <!-- Input Field OTP -->
+            <div class="flex justify-center space-x-2 sm:space-x-3 mb-6">
+                <!-- Gunakan 6 input terpisah untuk pengalaman mobile yang baik -->
+                <input type="number" class="otp-input" id="otp1" maxlength="1" required autofocus>
+                <input type="number" class="otp-input" id="otp2" maxlength="1" required>
+                <input type="number" class="otp-input" id="otp3" maxlength="1" required>
+                <div class="w-4 h-px bg-gray-300 self-center"></div> <!-- Pemisah visual -->
+                <input type="number" class="otp-input" id="otp4" maxlength="1" required>
+                <input type="number" class="otp-input" id="otp5" maxlength="1" required>
+                <input type="number" class="otp-input" id="otp6" maxlength="1" required>
+            </div>
+
+            <!-- Timer dan Resend -->
+            <div id="resendContainer" class="text-center text-sm">
+                <p id="timerText" class="text-gray-500 font-medium">
+                    Kode akan kadaluarsa dalam <span id="countdown" class="font-bold text-app-blue">00:60</span>
+                </p>
+                <button type="button" id="resendButton" class="text-app-blue hover:text-blue-700 font-bold transition duration-150 mt-3 hidden" disabled>
+                    Kirim Ulang Kode
+                </button>
+            </div>
+
+            <!-- Tombol Verifikasi -->
+            <button 
+                type="submit" 
+                class="w-full bg-app-blue text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition duration-300 btn-shadow flex items-center justify-center mt-8"
+            >
+                Verifikasi
+            </button>
+            
+            <!-- Placeholder Pesan Error/Notifikasi -->
+            <div id="messageBox" class="text-center p-3 rounded-xl mt-4 hidden"></div>
+
+        </form>
+    </div>
+
+    <!-- Skrip JavaScript untuk Interaksi OTP dan Timer -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const otpInputs = Array.from(document.querySelectorAll('.otp-input'));
+            const resendButton = document.getElementById('resendButton');
+            const countdownSpan = document.getElementById('countdown');
+            const timerText = document.getElementById('timerText');
+            const otpForm = document.getElementById('otpForm');
+            const messageBox = document.getElementById('messageBox');
+            let timer;
+            let timeRemaining = 60; // 60 detik
+
+            // Helper untuk navigasi input saat mengetik
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    // Batasi input hanya 1 digit
+                    if (input.value.length > 1) {
+                        input.value = input.value.slice(0, 1);
+                    }
+                    // Pindah ke input berikutnya secara otomatis
+                    if (input.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    // Pindah ke input sebelumnya saat Backspace ditekan
+                    if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+            });
+
+            // Fungsi untuk memulai/mengupdate Timer
+            function startTimer() {
+                timeRemaining = 60;
+                resendButton.classList.add('hidden');
+                resendButton.disabled = true;
+                timerText.classList.remove('text-red-600');
+                timerText.classList.add('text-gray-500');
+
+                clearInterval(timer); // Hapus timer lama
+                timer = setInterval(() => {
+                    timeRemaining--;
+                    const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+                    const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+                    countdownSpan.textContent = `${minutes}:${seconds}`;
+
+                    if (timeRemaining <= 0) {
+                        clearInterval(timer);
+                        timerText.innerHTML = 'Kode kadaluarsa. Silakan <span class="font-bold text-red-600">kirim ulang</span>.';
+                        resendButton.classList.remove('hidden');
+                        resendButton.disabled = false;
+                    }
+                }, 1000);
+            }
+
+            // Aksi saat tombol Kirim Ulang diklik
+            resendButton.addEventListener('click', () => {
+                showMessage('Kode baru telah dikirim!', 'bg-yellow-100 text-yellow-700 border border-yellow-300');
+                startTimer(); // Mulai timer lagi
+            });
+
+            // Fungsi helper untuk menampilkan pesan di message box
+            function showMessage(message, classes) {
+                messageBox.textContent = message;
+                messageBox.className = `text-center p-3 rounded-xl mt-4 ${classes}`;
+                messageBox.classList.remove('hidden');
+            }
+
+            // Aksi saat formulir Verifikasi disubmit
+            otpForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const otpCode = otpInputs.map(input => input.value).join('');
+                
+                if (otpCode.length !== 6) {
+                    showMessage('Mohon masukkan kode OTP 6 digit lengkap.', 'bg-red-100 text-red-700 border border-red-300');
+                    return;
+                }
+                
+                showMessage('Sedang memverifikasi kode...', 'bg-app-light text-app-blue');
+                clearInterval(timer); // Hentikan timer saat verifikasi
+
+                // Simulasi Verifikasi
+                setTimeout(() => {
+                    // Contoh kode OTP yang benar adalah 123456
+                    if (otpCode === '123456') {
+                        showMessage('Verifikasi Berhasil! Mengalihkan ke Beranda...', 'bg-green-100 text-green-700 border border-green-300');
+                        // Arahkan ke halaman dashboard utama setelah verifikasi berhasil
+                        setTimeout(() => {
+                            window.location.assign('main_dashboard.html');
+                        }, 1000); 
+                    } else {
+                        showMessage('Verifikasi Gagal. Kode OTP salah.', 'bg-red-100 text-red-700 border border-red-300');
+                        startTimer(); // Mulai timer lagi jika gagal
+                    }
+                }, 1500); // Delay 1.5 detik
+            });
+
+            // Mulai timer saat halaman dimuat
+            startTimer();
+        });
+    </script>
+</body>
+</html>

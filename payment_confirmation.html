@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pasar Cerdas - Konfirmasi Pembayaran</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* Mengatur body dan font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; 
+        }
+        
+        /* Style Khas: Header Lengkung */
+        .header-curve {
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        /* Menyembunyikan radio button asli */
+        .payment-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Style saat opsi dipilih (Kembali ke Style Kotak dengan border dan shadow biru) */
+        .payment-option input[type="radio"]:checked + label {
+            border-color: #0060AF; /* Warna border saat dipilih */
+            background-color: #E5F3FF; /* Warna background saat dipilih (Biru Muda) */
+            box-shadow: 0 4px 6px -1px rgb(0 96 175 / 0.2), 0 2px 4px -2px rgb(0 96 175 / 0.1);
+        }
+
+        /* Style untuk Checkmark icon (mengubah warna menjadi biru saat dipilih) */
+        .payment-option input[type="radio"]:checked + label .checked-icon {
+            color: #0060AF; 
+        }
+
+        /* Hover effect */
+        .payment-option label:hover {
+            border-color: #0060AF;
+        }
+        
+        /* Ukuran ikon di Payment Options */
+        .payment-icon {
+            width: 32px; /* Fixed width for better alignment */
+            height: 32px;
+            min-width: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Kontainer Aplikasi Penuh: Lebar penuh di semua ukuran -->
+    <div class="app-container w-full bg-white relative overflow-y-auto min-h-screen">
+
+        <!-- 1. HEADER (Lengkung Biru) -->
+        <div class="header-curve bg-[#0060AF] pt-8 pb-10 px-6 shadow-lg relative overflow-hidden">
+            
+            <!-- Ornamen Background -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <div class="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white opacity-10 rounded-full"></div>
+            </div>
+
+            <!-- Konten Header Atas -->
+            <div class="relative z-10 flex items-center text-white max-w-7xl mx-auto">
+                <!-- Tombol Kembali ke halaman detail retribusi -->
+                <a href="pay_retribution.html" class="bg-white/20 hover:bg-white/30 p-2 rounded-full transition backdrop-blur-sm">
+                    <i class="ph-bold ph-arrow-left text-xl"></i>
+                </a>
+                <h1 class="text-xl font-bold tracking-tight ml-4">Konfirmasi Pembayaran</h1>
+            </div>
+            
+        </div>
+
+        <!-- 2. KONTEN UTAMA (Floating Layout) -->
+        <main class="flex-grow px-5 -mt-6 relative z-20 pb-20 max-w-7xl mx-auto">
+            
+            <!-- CARD 1: Ringkasan Tagihan (Statik) -->
+            <div class="bg-white rounded-2xl p-5 shadow-lg mb-4 border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="ph-bold ph-invoice text-[#0060AF]"></i> Ringkasan Tagihan
+                </h2>
+                
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">ID Kios/Lokasi</span>
+                        <span class="font-semibold text-gray-700">K001 / Blok C, No. 05</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Periode Tagihan</span>
+                        <span class="font-semibold text-gray-700">November 2025</span>
+                    </div>
+                    <div class="flex justify-between border-t border-dashed border-gray-300 pt-3 mt-3">
+                        <span class="text-gray-800 font-bold text-base">Total Bayar</span>
+                        <span class="text-gray-800 font-bold text-base" id="totalPaymentDisplay">Rp 97.500</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: Pilih Metode Pembayaran -->
+            <div class="bg-white rounded-2xl p-5 shadow-lg mb-4 border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="ph-bold ph-credit-card text-[#0060AF]"></i> Pilih Metode Pembayaran
+                </h2>
+                
+                <div class="space-y-3" id="paymentMethodList">
+                    
+                    <!-- Opsi 1: QRIS (Menggunakan SVG Inline untuk Logo) -->
+                    <div class="payment-option">
+                        <input type="radio" id="methodQris" name="paymentMethod" value="QRIS" checked>
+                        <label for="methodQris" class="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer transition">
+                            <div class="flex-grow flex items-center">
+                                <!-- SVG Logo QRIS yang Lebih Otentik -->
+                                <div class="payment-icon bg-white mr-3">
+                                    <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Background Putih dan Garis QR -->
+                                        <rect width="100" height="100" rx="10" fill="white"/>
+                                        <!-- Logo QRIS (Garis Merah, Kuning, Hijau) -->
+                                        <rect x="15" y="15" width="25" height="25" rx="3" fill="#D32F2F"/>
+                                        <rect x="60" y="15" width="25" height="25" rx="3" fill="#FBC02D"/>
+                                        <rect x="15" y="60" width="25" height="25" rx="3" fill="#388E3C"/>
+                                        <!-- Area QR (abu-abu/biru) -->
+                                        <rect x="60" y="60" width="15" height="15" rx="2" fill="#0060AF"/>
+                                        <rect x="78" y="60" width="7" height="7" rx="1" fill="#0060AF"/>
+                                        <rect x="60" y="78" width="7" height="7" rx="1" fill="#0060AF"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">QRIS</p>
+                                    <p class="text-xs text-gray-500">Pembayaran non-tunai dari berbagai penyedia.</p>
+                                </div>
+                            </div>
+                            <!-- Icon checkmark -->
+                            <i class="ph-bold ph-check-circle text-2xl text-gray-300 checked-icon transition"></i>
+                        </label>
+                    </div>
+
+                    <!-- Opsi 2: Bank BJB -->
+                    <div class="payment-option">
+                        <input type="radio" id="methodBJB" name="paymentMethod" value="Bank BJB">
+                        <label for="methodBJB" class="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer transition">
+                            <div class="flex-grow flex items-center">
+                                <!-- Ikon Bank yang disesuaikan -->
+                                <div class="payment-icon bg-red-100 text-red-600 mr-3">
+                                    <i class="ph-bold ph-money text-xl"></i> 
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">Bank BJB</p>
+                                    <p class="text-xs text-gray-500">Pembayaran melalui Virtual Account Bank BJB.</p>
+                                </div>
+                            </div>
+                            <!-- Icon checkmark -->
+                            <i class="ph-bold ph-check-circle text-2xl text-gray-300 checked-icon transition"></i>
+                        </label>
+                    </div>
+
+                    <!-- Opsi 3: Bank Lain (Transfer) -->
+                    <div class="payment-option">
+                        <input type="radio" id="methodOtherBank" name="paymentMethod" value="Bank Lain">
+                        <label for="methodOtherBank" class="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer transition">
+                            <div class="flex-grow flex items-center">
+                                <div class="payment-icon bg-indigo-100 text-indigo-600 mr-3">
+                                    <i class="ph-bold ph-bank text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">Bank Lain (Transfer)</p>
+                                    <p class="text-xs text-gray-500">Menerima transfer dari bank lain (mis: BCA, Mandiri, BRI).</p>
+                                </div>
+                            </div>
+                            <!-- Icon checkmark -->
+                            <i class="ph-bold ph-check-circle text-2xl text-gray-300 checked-icon transition"></i>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Pesan Peringatan Metode Pembayaran -->
+            <div id="paymentWarning" class="text-sm p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-xl flex items-start gap-3 hidden">
+                <i class="ph-bold ph-info text-xl mt-0.5"></i>
+                <span>Anda harus memilih salah satu metode pembayaran untuk melanjutkan transaksi.</span>
+            </div>
+            
+        </main>
+
+        <!-- 3. Tombol Aksi Bawah (Fixed) -->
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-30 shadow-2xl shadow-gray-200">
+            <div class="max-w-7xl mx-auto">
+                <button id="processPaymentButton" 
+                        class="w-full bg-[#0060AF] text-white font-bold py-3 rounded-xl transition shadow-lg shadow-blue-300/50 hover:bg-[#004a8c]">
+                    <i class="ph-bold ph-paper-plane-tilt mr-2"></i> Bayar Sekarang
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <!-- End Kontainer Aplikasi Penuh -->
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set log level for debugging
+        setLogLevel('debug'); 
+
+        // Global variables for Firebase configuration (Mandatory for Canvas environment)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null; 
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        let userId = null;
+
+        // Function to handle Firebase authentication
+        async function authenticateUser() {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                userId = auth.currentUser?.uid || crypto.randomUUID();
+                console.log("Firebase authentication successful. User ID:", userId);
+            } catch (error) {
+                console.error("Firebase authentication failed:", error);
+            }
+        }
+        
+        authenticateUser(); // Call authentication on load
+
+        /**
+         * Fungsi untuk mendapatkan metode pembayaran yang dipilih
+         * @returns {string | null} Nilai metode pembayaran yang dipilih (QRIS, Bank BJB, Bank Lain) atau null jika tidak ada.
+         */
+        function getSelectedPaymentMethod() {
+            const selectedRadio = document.querySelector('input[name="paymentMethod"]:checked');
+            return selectedRadio ? selectedRadio.value : null;
+        }
+
+        /**
+         * Fungsi untuk menampilkan Modal Kustom (pengganti alert/confirm)
+         * @param {string} title - Judul modal
+         * @param {string} message - Isi pesan
+         * @param {function} onConfirm - Callback saat tombol 'Proses' ditekan
+         * @param {string} confirmText - Teks tombol konfirmasi
+         */
+        function showCustomModal(title, message, onConfirm = null, confirmText = 'OK') {
+            const existingModal = document.querySelector('.custom-modal-overlay');
+            if (existingModal) existingModal.remove();
+
+            const customModal = document.createElement('div');
+            customModal.className = 'custom-modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 transition-opacity duration-300 opacity-0';
+            
+            const confirmButtonHtml = onConfirm ? 
+                `<button id="confirmAction" class="px-4 py-2 text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 transition">${confirmText}</button>` : 
+                `<button id="closeModal" class="px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition">Tutup</button>`;
+
+            const cancelButtonHtml = onConfirm ? `<button id="closeModal" class="px-4 py-2 text-sm font-medium rounded-lg text-gray-600 border border-gray-300 hover:bg-gray-100 transition">Batal</button>` : '';
+
+
+            customModal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-sm w-full transform transition-transform duration-300 scale-95">
+                    <h3 class="text-xl font-bold text-[#0060AF] mb-3">${title}</h3>
+                    <p class="text-gray-700 whitespace-pre-line text-sm mb-5">${message}</p>
+                    <div class="flex justify-end space-x-3">
+                        ${cancelButtonHtml}
+                        ${confirmButtonHtml}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(customModal);
+
+            // Animate in
+            setTimeout(() => {
+                customModal.classList.remove('opacity-0');
+                customModal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+
+
+            document.getElementById('closeModal').addEventListener('click', () => {
+                customModal.remove();
+            });
+            
+            if (onConfirm) {
+                document.getElementById('confirmAction').addEventListener('click', () => {
+                    customModal.remove();
+                    onConfirm();
+                });
+            }
+        }
+
+        // --- Event Listeners and DOM Manipulation (Wrapped in DOMContentLoaded for safety) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const processPaymentButton = document.getElementById('processPaymentButton');
+            const paymentWarning = document.getElementById('paymentWarning');
+
+            // Event Listener untuk tombol Bayar Sekarang
+            if (processPaymentButton) {
+                processPaymentButton.addEventListener('click', () => {
+                    const selectedMethod = getSelectedPaymentMethod();
+                    const totalBayar = document.getElementById('totalPaymentDisplay').textContent;
+                    
+                    // 1. Validasi Metode Pembayaran
+                    const validMethods = ['QRIS', 'Bank BJB', 'Bank Lain'];
+                    if (!selectedMethod || !validMethods.includes(selectedMethod)) {
+                        paymentWarning.classList.remove('hidden');
+                        // Menggunakan modal sebagai feedback tambahan
+                        showCustomModal(
+                            "Peringatan",
+                            "Harap pilih salah satu metode pembayaran (QRIS, Bank BJB, atau Bank Lain) sebelum melanjutkan transaksi.",
+                            null,
+                            "Mengerti"
+                        );
+                        return;
+                    } else {
+                        paymentWarning.classList.add('hidden');
+                    }
+                    
+                    // 2. Simulasi Proses Pembayaran
+                    const message = `Anda memilih metode pembayaran: ${selectedMethod}.\n\nTotal yang akan dibayarkan: ${totalBayar}.\n\nLanjutkan proses pembayaran?`;
+                    
+                    showCustomModal(
+                        "Verifikasi Pembayaran",
+                        message,
+                        () => {
+                            // LOGIKA NAVIGASI BERDASARKAN METODE
+                            if (selectedMethod === 'QRIS') {
+                                // Jika QRIS, navigasi ke halaman tampilan QRIS
+                                showCustomModal("Simulasi Pembayaran", "Simulasi: Mengarahkan ke halaman QRIS Payment untuk memunculkan QR Code.", null, "OK");
+                                // window.location.href = 'qris_payment.html'; 
+                            } else if (selectedMethod === 'Bank BJB') {
+                                showCustomModal("Simulasi Pembayaran", "Simulasi: Proses pembayaran dengan Bank BJB (Virtual Account) telah dimulai. Detail Virtual Account akan ditampilkan.", null, "OK");
+                            } else {
+                                 // Bank Lain
+                                showCustomModal("Simulasi Pembayaran", `Simulasi: Proses pembayaran dengan ${selectedMethod} telah dimulai. Instruksi transfer antar bank akan ditampilkan.`, null, "OK");
+                            }
+                        },
+                        "Proses Pembayaran"
+                    );
+                });
+            }
+
+            // Event listener untuk menghilangkan warning jika pilihan diubah
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    if (getSelectedPaymentMethod()) {
+                        paymentWarning.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
