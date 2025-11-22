@@ -151,7 +151,7 @@
                 <h2 id="saldo-text" class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight mb-5   ">Rp •••••••</h2> 
                 
                 <div class="flex gap-3">
-                    <a href="#" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-blue-200 transition active:scale-95 flex items-center justify-center gap-2"> 
+                    <a href="#" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-bold transition active:scale-95 flex items-center justify-center gap-2"> 
                         <i class="ph-bold ph-plus"></i> Isi Saldo
                     </a>
                     <a href="history_list.html" class="flex-1 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 py-2.5 rounded-xl text-sm font-bold transition active:scale-95 flex items-center justify-center gap-2"> 
@@ -176,7 +176,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-slate-900 font-bold text-lg">Rp 2.000</p> 
-                        <a href="pembayaran_retribusi.html" class="mt-1 text-xs bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-lg font-bold shadow-md shadow-red-200 transition">Bayar</a> 
+                        <a href="pay_retribution.html" class="mt-1 text-xs bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-lg font-bold shadow-md shadow-red-200 transition">Bayar</a> 
                     </div>
                 </div>
             </div>
@@ -187,7 +187,7 @@
             <div class="grid grid-cols-4 md:grid-cols-6 gap-3 lg:gap-4">
                 
                 <!-- Retribusi -->
-                <a href="#" class="group flex flex-col items-center gap-1.5 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-200 transition"> 
+                <a href="pay_retribution.html" class="group flex flex-col items-center gap-1.5 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-200 transition"> 
                     <div class="w-10 h-10 lg:w-14 lg:h-14 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition duration-300"> 
                         <i class="ph-fill ph-receipt text-xl lg:text-3xl"></i> 
                     </div>
@@ -195,7 +195,7 @@
                 </a>
                 
                 <!-- Riwayat -->
-                <a href="#" class="group flex flex-col items-center gap-1.5 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-orange-200 transition"> 
+                <a href="history_list.html" class="group flex flex-col items-center gap-1.5 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-orange-200 transition"> 
                     <div class="w-10 h-10 lg:w-14 lg:h-14 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition duration-300"> 
                         <i class="ph-fill ph-clock-counter-clockwise text-xl lg:text-3xl"></i> 
                     </div>
@@ -364,7 +364,8 @@
 
     </main>
 
-    <!-- Bottom Navigation Mobile (Hanya muncul di layar kecil) --><div class="lg:hidden fixed bottom-0 w-full bg-white border-t border-slate-200 flex justify-around items-end pb-5 pt-3 px-2 z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.03)]">
+    <!-- Bottom Navigation Mobile (Hanya muncul di layar kecil) -->
+    <div class="lg:hidden fixed bottom-0 w-full bg-white border-t border-slate-200 flex justify-around rounded-3xl items-end pb-3 pt-0 px-2 py-2 z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.03)]">
         <a href="main_dashboard.html" class="flex flex-col items-center gap-1 w-16 group">
             <i class="ph-fill ph-house text-blue-600 text-2xl group-hover:scale-110 transition"></i>
             <span class="text-[10px] font-medium text-blue-600">Beranda</span>
@@ -374,7 +375,7 @@
             <span class="text-[10px] font-medium">Tagihan</span>
         </a>
         
-        <!-- Tombol QRIS/Aksi Utama --><div class="relative -top-6">
+        <!-- Tombol QRIS/Aksi Utama --><div class="relative -top-3">
             <a href="#" class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-300 border-[5px] border-white active:scale-95 transition transform hover:-translate-y-1 group">
                 <i class="ph-bold ph-qr-code text-white text-3xl group-hover:scale-110 transition"></i>
             </a>
