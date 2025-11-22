@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pasar Cerdas - Panduan</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Kustomisasi Warna agar mirip BCA -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bca: {
+                            dark: '#003D79',   /* Biru Gelap Khas BCA */
+                            main: '#0060AF',   /* Biru Utama */
+                            light: '#E5F3FF',  /* Biru Muda Background/Highlight */
+                            gold: '#DAA520',   /* Aksen Gold/Kuning */
+                        },
+                        // Warna status
+                        success: '#10B981', 
+                        warning: '#FBBF24', 
+                        danger: '#EF4444', 
+                        info: '#3B82F6', 
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Mengatur body dan font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; 
+        }
+        
+        /* Style Khas V2: Header Lengkung */
+        .header-curve {
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* Styling Ornamen Lingkaran (Hanya yang besar) */
+        .ornament-circle-large {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1); 
+            z-index: 0;
+        }
+
+        /* Padding aman untuk bottom nav */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* --- ACCORDION STYLE STATIS --- */
+        /* Konten default tersembunyi, di sini tidak menggunakan transisi JS */
+        .accordion-content {
+            display: none;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 1.5rem;
+        }
+
+        /* Kelas untuk item yang terbuka secara statis */
+        .accordion-item.open .accordion-content {
+            display: block;
+            padding-top: 0.75rem;
+        }
+
+        /* Kelas untuk memutar ikon panah (visual saat terbuka) */
+        .accordion-item.open .ph-caret-down {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header Lengkung Biru (Konsisten dengan Notifikasi & Riwayat) -->
+    <header class="bg-bca-main header-curve pb-0 sticky top-0 z-20">
+        
+        <!-- Ornamen Dekoratif -->
+        <div class="ornament-circle-large"></div>
+        
+        <!-- Konten Header Utama -->
+        <div class="max-w-md mx-auto relative z-10">
+            
+            <!-- Baris Atas: Tombol Kembali, Judul, Aksi -->
+            <div class="flex items-center justify-between text-white p-4 py-4"> 
+                <div class="flex items-center gap-3">
+                    <!-- Tombol Kembali -->
+                    <a href="main_dashboard.html" class="bg-white/20 hover:bg-white/30 p-2 rounded-full transition backdrop-blur-sm active:scale-95">
+                        <i class="ph-bold ph-arrow-left text-xl"></i>
+                    </a>
+                    <!-- Judul -->
+                    <h1 class="text-xl font-bold tracking-tight">Pusat Bantuan & Panduan</h1>
+                </div>
+                
+                <!-- Tombol Aksi Kanan: Cari -->
+                <button class="bg-white/20 hover:bg-white/30 p-2 rounded-full transition backdrop-blur-sm active:scale-95">
+                    <i class="ph-bold ph-magnifying-glass text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Deskripsi Singkat di bawah judul -->
+            <p class="text-sm text-white/90 px-4 pb-6 leading-relaxed">Temukan jawaban atas pertanyaan Anda, pelajari cara menggunakan fitur, atau hubungi tim bantuan.</p>
+        </div>
+    </header>
+
+    <!-- Konten Utama Panduan -->
+    <main class="max-w-md mx-auto p-4 space-y-6 pb-24"> 
+
+        <!-- Bagian 1: Kontak Bantuan Cepat (Sudah Card) -->
+        <section class="bg-white p-5 rounded-2xl shadow-lg border border-gray-100">
+            <h2 class="text-lg font-bold text-bca-dark mb-4 flex items-center gap-2"><i class="ph-bold ph-headset text-xl text-bca-main"></i> Butuh Bantuan Cepat?</h2>
+            
+            <div class="space-y-3">
+                <!-- Kontak 1: WhatsApp -->
+                <a href="https://wa.me/628123456789" target="_blank" class="flex items-center justify-between p-3 bg-green-50 rounded-xl hover:bg-green-100 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <i class="ph-fill ph-whatsapp-logo text-2xl text-green-600"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Hubungi via WhatsApp</p>
+                            <p class="text-xs text-gray-500">Respon dalam hitungan menit</p>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </a>
+
+                <!-- Kontak 2: Email -->
+                <a href="mailto:bantuan@pasarcampus.id" class="flex items-center justify-between p-3 bg-bca-light rounded-xl hover:bg-bca-light/80 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <i class="ph-fill ph-envelope-simple text-2xl text-bca-main"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Kirim Email Dukungan</p>
+                            <p class="text-xs text-gray-500">Maks. 1x24 jam</p>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Bagian 2: Pertanyaan Umum (Sudah Card) -->
+        <section class="bg-white rounded-2xl shadow-lg border border-gray-100 divide-y divide-gray-100">
+            <h2 class="text-lg font-bold text-bca-dark p-5 flex items-center gap-2 border-b border-gray-100"><i class="ph-bold ph-question text-xl text-bca-main"></i> Pertanyaan Umum (FAQ)</h2>
+            
+            <!-- FAQ 1: Apa itu Retribusi? -->
+            <div class="accordion-item" data-id="faq-1">
+                <button class="accordion-header w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                    <span class="text-sm font-semibold text-gray-800">1. Apa itu retribusi?</span>
+                    <i class="ph-bold ph-caret-down text-lg text-bca-main transition-transform duration-300 transform"></i>
+                </button>
+                <div class="accordion-content">
+                    <p class="text-sm text-gray-600">Retribusi adalah pungutan yang dikenakan kepada pengguna lapak/kios pasar sebagai biaya pelayanan dan pengelolaan fasilitas pasar. Pembayaran retribusi wajib dilakukan oleh setiap pedagang sesuai jadwal yang ditentukan.</p>
+                </div>
+            </div>
+
+            <!-- FAQ 2: Cara Bayar (DIBUKA SECARA STATIS) -->
+            <div class="accordion-item open" data-id="faq-2">
+                <button class="accordion-header w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                    <span class="text-sm font-semibold text-gray-800">2. Bagaimana cara melakukan pembayaran retribusi?</span>
+                    <i class="ph-bold ph-caret-down text-lg text-bca-main transition-transform duration-300 transform"></i>
+                </button>
+                <div class="accordion-content">
+                    <p class="text-sm text-gray-600">Anda dapat membayar retribusi melalui halaman utama (Dashboard), pilih menu **"Bayar Retribusi"**. Kemudian, pilih periode pembayaran, dan metode pembayaran (QRIS, Virtual Account, atau Transfer Bank) yang tersedia. Kami menyediakan panduan langkah demi langkah di bawah ini:</p>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-2 mt-4 ml-4">
+                        <li>Akses Menu: Dari Beranda, ketuk ikon "Bayar Retribusi".</li>
+                        <li>Pilih Periode: Tentukan bulan atau periode pembayaran yang ingin Anda lunasi.</li>
+                        <li>Cek Tagihan: Pastikan total tagihan (termasuk denda jika ada) sudah benar.</li>
+                        <li>Metode Bayar: Pilih salah satu opsi pembayaran (misalnya, QRIS atau Bank Transfer).</li>
+                        <li>Konfirmasi: Lakukan konfirmasi dan lanjutkan ke proses pembayaran di aplikasi bank/dompet digital Anda.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FAQ 3: Jika Terlambat -->
+            <div class="accordion-item" data-id="faq-3">
+                <button class="accordion-header w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                    <span class="text-sm font-semibold text-gray-800">3. Apa yang terjadi jika saya terlambat membayar?</span>
+                    <i class="ph-bold ph-caret-down text-lg text-bca-main transition-transform duration-300 transform"></i>
+                </button>
+                <div class="accordion-content">
+                    <p class="text-sm text-gray-600">Keterlambatan pembayaran dapat dikenakan denda sesuai dengan kebijakan pasar yang berlaku. Denda tersebut akan secara otomatis dihitung dan ditambahkan pada total tagihan Anda saat melakukan proses pembayaran.</p>
+                </div>
+            </div>
+            
+            <!-- FAQ 4: Gagal Bayar -->
+            <div class="accordion-item" data-id="faq-4">
+                <button class="accordion-header w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                    <span class="text-sm font-semibold text-gray-800">4. Transaksi pembayaran saya gagal, apa yang harus saya lakukan?</span>
+                    <i class="ph-bold ph-caret-down text-lg text-bca-main transition-transform duration-300 transform"></i>
+                </button>
+                <div class="accordion-content">
+                    <p class="text-sm text-gray-600">Pastikan saldo akun Anda mencukupi dan koneksi internet stabil. Jika masalah berlanjut, hubungi kami melalui saluran bantuan cepat (WhatsApp) di atas, sertakan ID Transaksi jika ada.</p>
+                </div>
+            </div>
+
+        </section>
+        
+        <!-- Bagian 3: Informasi Lain (Diubah menjadi Card Style V2) -->
+        <section class="bg-white p-5 rounded-2xl shadow-lg border border-gray-100">
+             <h2 class="text-lg font-bold text-bca-dark mb-4 flex items-center gap-2 border-b border-gray-100 pb-3"><i class="ph-bold ph-book-open text-xl text-bca-main"></i> Informasi Legal</h2>
+             
+             <div class="divide-y divide-gray-100">
+                 <!-- Link Dokumen 1 -->
+                 <a href="#" class="flex items-center justify-between py-3 hover:bg-gray-50 -mx-5 px-5 transition active:scale-[0.99] group">
+                    <span class="text-sm font-medium text-gray-800">Syarat dan Ketentuan Penggunaan</span>
+                    <i class="ph-bold ph-caret-right text-bca-main text-lg group-hover:text-bca-dark transition"></i>
+                 </a>
+                 
+                 <!-- Link Dokumen 2 -->
+                 <a href="#" class="flex items-center justify-between py-3 hover:bg-gray-50 -mx-5 px-5 transition active:scale-[0.99] group">
+                    <span class="text-sm font-medium text-gray-800">Kebijakan Privasi Data</span>
+                    <i class="ph-bold ph-caret-right text-bca-main text-lg group-hover:text-bca-dark transition"></i>
+                 </a>
+             </div>
+        </section>
+
+    </main>
+    
+</body>
+</html>

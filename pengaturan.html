@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pasar Cerdas - Pengaturan</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons (Menggunakan FILL untuk tampilan logo yang lebih solid) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Kustomisasi Warna agar mirip BCA -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bca: {
+                            dark: '#003D79',   /* Biru Gelap Khas BCA */
+                            main: '#0060AF',   /* Biru Utama */
+                            light: '#E5F3FF',  /* Biru Muda Background/Highlight */
+                        },
+                        // Warna status
+                        danger: '#EF4444', 
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Mengatur body dan font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; 
+        }
+        
+        /* Style Khas V2: Header Lengkung */
+        .header-curve {
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* Styling Ornamen Lingkaran (Hanya estetika) */
+        .ornament-circle-large {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1); 
+            z-index: 0;
+        }
+
+        /* Kelas Item Pengaturan: Padding kompak dan seimbang (py-3 px-4) */
+        .setting-item {
+            /* Flex untuk aligment vertikal, padding x-4 untuk jarak tepi */
+            @apply flex items-center justify-between py-3 px-4 hover:bg-gray-50 active:scale-[0.99] transition duration-150 cursor-pointer;
+        }
+
+        /* Kelas Ikon: Ukuran dan warna yang konsisten */
+        .setting-icon-primary {
+            @apply w-9 h-9 rounded-full flex items-center justify-center bg-bca-light text-bca-main text-lg flex-shrink-0;
+        }
+        .setting-icon-secondary {
+            @apply w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 text-gray-600 text-lg flex-shrink-0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- BAGIAN 1: HEADER & PROFIL (BIRU) -->
+    <header class="bg-bca-main header-curve pb-0 sticky top-0 z-20">
+        <div class="ornament-circle-large"></div>
+        <div class="max-w-md mx-auto relative z-10">
+            <!-- Navbar/Title Bar -->
+            <div class="flex items-center gap-3 text-white p-4 py-4"> 
+                <!-- Tombol Kembali -->
+                <a href="#" class="bg-white/20 hover:bg-white/30 p-2 rounded-full transition backdrop-blur-sm active:scale-95">
+                    <i class="ph-bold ph-arrow-left text-xl"></i>
+                </a>
+                <h1 class="text-xl font-bold tracking-tight">Pengaturan</h1>
+            </div>
+
+            <!-- Card Ringkasan Profil Singkat (Layout telah disempurnakan) -->
+            <div class="flex items-center gap-4 p-4 mb-4 bg-white rounded-xl shadow-xl border border-bca-light/50 mx-4 -translate-y-1">
+                <div class="w-12 h-12 bg-bca-light text-bca-main rounded-full flex items-center justify-center font-bold text-lg border-2 border-bca-main/50 flex-shrink-0">
+                    MJ
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-gray-800 truncate">Makmur Jaya Kios (ID: L-B23/001)</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Pemilik: Budi Santoso</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BAGIAN 2: KONTEN UTAMA (PENGATURAN) -->
+    <main class="flex-grow max-w-md mx-auto p-4 w-full space-y-5"> 
+
+        <!-- KATEGORI A: Akun dan Kios -->
+        <section class="space-y-2">
+            <h2 class="text-xs font-bold text-bca-main uppercase tracking-wider pl-1">Akun dan Kios</h2>
+
+            <!-- Card Container untuk Kategori A -->
+            <div class="bg-white rounded-xl shadow-md border border-gray-100 divide-y divide-gray-100 overflow-hidden">
+                
+                <!-- Item: Profil Kios -->
+                <div class="setting-item">
+                    <div class="flex items-center gap-3">
+                        <div class="setting-icon-primary">
+                            <i class="ph-fill ph-storefront"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-sm text-gray-800">Profil & Detail Kios</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Nama, kontak, deskripsi</p>
+                        </div>
+                    </div>
+                    <!-- Panah ke kanan yang kini memiliki jarak yang sama dengan ikon di kiri -->
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </div>
+
+                <!-- Item: Informasi Pemilik -->
+                <div class="setting-item">
+                     <div class="flex items-center gap-3">
+                        <div class="setting-icon-primary">
+                            <i class="ph-fill ph-user-circle"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-sm text-gray-800">Informasi Pribadi Pemilik</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Data diri, NIK, alamat</p>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORI B: Keamanan dan Aplikasi -->
+        <section class="space-y-2">
+            <h2 class="text-xs font-bold text-bca-main uppercase tracking-wider pl-1">Keamanan dan Aplikasi</h2>
+            
+            <!-- Card Container untuk Kategori B -->
+            <div class="bg-white rounded-xl shadow-md border border-gray-100 divide-y divide-gray-100 overflow-hidden">
+                <!-- Item: Ganti PIN/Password -->
+                <div class="setting-item">
+                     <div class="flex items-center gap-3">
+                        <div class="setting-icon-primary">
+                            <i class="ph-fill ph-lock-key"></i>
+                        </div>
+                        <p class="font-semibold text-sm text-gray-800">Ubah PIN Transaksi</p>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </div>
+                
+                <!-- Item: Pengaturan Notifikasi (Tanpa aksi klik, hanya tampilan switch) -->
+                <div class="setting-item hover:bg-white !cursor-default">
+                    <div class="flex items-center gap-3">
+                        <div class="setting-icon-secondary">
+                            <i class="ph-fill ph-bell-simple"></i>
+                        </div>
+                        <p class="font-semibold text-sm text-gray-800">Notifikasi Pembayaran</p>
+                    </div>
+                    <!-- Toggle Switch (Visual) -->
+                    <label class="relative inline-flex items-center cursor-pointer ml-auto pr-0">
+                        <input type="checkbox" value="" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-bca-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bca-main"></div>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORI C: Bantuan dan Informasi -->
+        <section class="space-y-2">
+            <h2 class="text-xs font-bold text-bca-main uppercase tracking-wider pl-1">Bantuan dan Informasi</h2>
+
+            <!-- Card Container untuk Kategori C -->
+            <div class="bg-white rounded-xl shadow-md border border-gray-100 divide-y divide-gray-100 overflow-hidden">
+                <!-- Item: Hubungi Kami -->
+                <div class="setting-item">
+                     <div class="flex items-center gap-3">
+                        <div class="setting-icon-secondary">
+                            <i class="ph-fill ph-headset"></i>
+                        </div>
+                        <p class="font-semibold text-sm text-gray-800">Pusat Bantuan & CS</p>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </div>
+                
+                <!-- Item: Syarat dan Ketentuan -->
+                <div class="setting-item">
+                     <div class="flex items-center gap-3">
+                        <div class="setting-icon-secondary">
+                            <i class="ph-fill ph-file-text"></i>
+                        </div>
+                        <p class="font-semibold text-sm text-gray-800">Syarat dan Ketentuan</p>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-gray-400"></i>
+                </div>
+                
+                <!-- Item: Versi Aplikasi (Hanya Info) -->
+                <div class="setting-item hover:bg-white !cursor-default">
+                     <div class="flex items-center gap-3">
+                        <div class="setting-icon-secondary">
+                            <i class="ph-fill ph-info"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-sm text-gray-800">Versi Aplikasi</p>
+                        </div>
+                    </div>
+                    <!-- Info versi, sejajar dengan panah -->
+                    <p class="text-xs font-semibold text-bca-main">v2.1.0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORI D: Logout (Tombol terpisah) -->
+        <section class="space-y-3 pt-4 pb-8">
+            <button class="w-full">
+                <div class="flex items-center justify-center gap-3 p-4 bg-white rounded-xl shadow-md border border-danger/20 hover:bg-gray-50 active:scale-[0.99] transition">
+                    <i class="ph-bold ph-sign-out text-xl text-danger"></i>
+                    <p class="font-bold text-sm text-danger">KELUAR (LOGOUT)</p>
+                </div>
+            </button>
+        </section>
+
+    </main>
+</body>
+</html>
